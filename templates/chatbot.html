@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malware Detection Chatbot</title>
+	<link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .chatbot-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .chat-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ced4da;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        .userMessage {
+            background-color: #d4edda;
+            text-align: right;
+        }
+        .botMessage {
+            background-color: #f8d7da;
+            text-align: left;
+        }
+        .button-container {
+            text-align: center;
+        }
+        .choiceButton {
+            margin: 5px;
+            width: 40%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .choiceButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation bar -->
+    <nav>
+        <a href="/admin_dashboard" >Dashboard</a>
+        <a href="/data_visualization">Data Visualization</a>
+        <a href="/data_prediction">Data Prediction</a>
+        <a href="/upload_dataset">Upload Dataset</a>
+		<a href="/chatbot" class="active">Chat Bot</a>
+		<a href="q_and_a">Admin Q&A</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+<div class="container chatbot-container">
+    <h1 class="chat-header">Malware Detection Chatbot</h1>
+    <div id="chatBox" class="chat-container"></div>
+    <div class="button-container">
+        <button id="yesButton" class="choiceButton">Yes</button>
+        <button id="noButton" class="choiceButton">No</button>
+    </div>
+</div>
+
+<script>
+    let currentQuestion = 0;
+    const questionPool = [
+        { id: 1, question: "Is your computer running slowly?", answers: { yes: 2, no: 3 }, conclusion: null },
+        { id: 2, question: "Do you see pop-up ads while browsing?", answers: { yes: 4, no: 5 }, conclusion: null },
+        { id: 3, question: "Is your antivirus software disabled?", answers: { yes: 6, no: 7 }, conclusion: null },
+        { id: 4, question: "Are you being redirected to unfamiliar websites?", answers: { yes: 8, no: 9 }, conclusion: null },
+        { id: 5, question: "Your system may have Adware.", answers: null, conclusion: "Adware Detected" },
+        { id: 6, question: "Is your firewall disabled?", answers: { yes: 10, no: 11 }, conclusion: null },
+        { id: 7, question: "Have you noticed unauthorized software installed?", answers: { yes: 12, no: 13 }, conclusion: null },
+        { id: 8, question: "Your system might be infected by a Trojan.", answers: null, conclusion: "Possible Trojan" },
+        { id: 9, question: "Your system is malware-free but may need updates.", answers: null, conclusion: "No Malware Detected" },
+        { id: 10, question: "Are files disappearing or being renamed?", answers: { yes: 14, no: 15 }, conclusion: null },
+        { id: 11, question: "Have you noticed any unauthorized access to your accounts?", answers: { yes: 16, no: 17 }, conclusion: null },
+        { id: 12, question: "Your system might be infected with Spyware.", answers: null, conclusion: "Possible Spyware" },
+        { id: 13, question: "Have you received suspicious emails with attachments?", answers: { yes: 18, no: 19 }, conclusion: null },
+        { id: 14, question: "Your system might be infected with a Rootkit.", answers: null, conclusion: "Possible Rootkit" },
+        { id: 15, question: "Your system appears to be safe but check for updates.", answers: null, conclusion: "Safe, but consider updates" },
+        { id: 16, question: "Your system may have a Keylogger.", answers: null, conclusion: "Possible Keylogger" },
+        { id: 17, question: "Your system appears malware-free.", answers: null, conclusion: "No Malware Detected" },
+        { id: 18, question: "You may have received a Phishing email.", answers: null, conclusion: "Possible Phishing Email" },
+        { id: 19, question: "Your system is malware-free, but stay cautious.", answers: null, conclusion: "No Malware Detected, but be cautious" },
+    ];
+
+    function showMessage(message, type) {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message", type === "user" ? "userMessage" : "botMessage");
+        messageDiv.innerText = message;
+        document.getElementById("chatBox").appendChild(messageDiv);
+        document.getElementById("chatBox").scrollTop = document.getElementById("chatBox").scrollHeight;
+    }
+
+    function showQuestion() {
+        const question = questionPool[currentQuestion];
+        showMessage(question.question, "bot");
+    }
+
+    function provideConclusion() {
+        const question = questionPool[currentQuestion];
+        if (question.conclusion) {
+            showMessage("Conclusion: " + question.conclusion, "bot");
+        } else {
+            showMessage("Conclusion: No malware detected or system is healthy.", "bot");
+        }
+        document.getElementById("yesButton").style.display = "none";
+        document.getElementById("noButton").style.display = "none";
+    }
+
+    // Display first question on page load
+    window.onload = function() {
+        showQuestion();
+    };
+
+    document.getElementById("yesButton").onclick = function() {
+        showMessage("Yes", "user");
+        if (questionPool[currentQuestion].answers && questionPool[currentQuestion].answers.yes) {
+            currentQuestion = questionPool[currentQuestion].answers.yes - 1;
+            showQuestion();
+        } else {
+            provideConclusion();
+        }
+    };
+
+    document.getElementById("noButton").onclick = function() {
+        showMessage("No", "user");
+        if (questionPool[currentQuestion].answers && questionPool[currentQuestion].answers.no) {
+            currentQuestion = questionPool[currentQuestion].answers.no - 1;
+            showQuestion();
+        } else {
+            provideConclusion();
+        }
+    };
+</script>
+
+</body>
+</html>

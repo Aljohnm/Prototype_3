@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malware Detection Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+
+        .chatbot-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .chat-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ced4da;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        .userMessage {
+            background-color: #d4edda;
+            text-align: right;
+        }
+        .botMessage {
+            background-color: #f8d7da;
+            text-align: left;
+        }
+        .button-container {
+            text-align: center;
+        }
+        .choiceButton {
+            margin: 5px;
+            width: 40%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .choiceButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation bar -->
+    <nav>
+	    <a href="/user_dashboard">Dashboard</a>
+        <a href="/result" >Check URL</a> <!-- Added "Check URL" link -->
+        <a href="/overview_malware">Malware Overview</a>
+        <a href="/risk_notification">Risk Info</a>
+        <a href="/users_qa">User Q&A</a>
+        <a href="/chatbotuser" class="active">Chat Bot</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <div class="container chatbot-container">
+        <h1 class="chat-header">Malware Detection Chatbot</h1>
+        <div id="chatBox" class="chat-container"></div>
+        <div class="button-container">
+            <button id="yesButton" class="choiceButton">Yes</button>
+            <button id="noButton" class="choiceButton">No</button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        const questionPool = [
+            { id: 1, question: "Is your computer running slowly?", answers: { yes: 2, no: 3 } },
+            { id: 2, question: "Do you see pop-up ads while browsing?", answers: { yes: 4, no: 5 } },
+            { id: 3, question: "Is your antivirus software disabled?", answers: { yes: 6, no: 7 } },
+            { id: 4, question: "Are you being redirected to unfamiliar websites?", answers: { yes: 8, no: 9 } },
+            { id: 5, question: "Have you noticed unexpected behavior in your browser?", answers: { yes: 10, no: 11 } },
+            { id: 6, question: "Have you installed any new software recently?", answers: { yes: 12, no: 13 } },
+            { id: 7, question: "Is your system unusually slow when connected to the internet?", answers: { yes: 14, no: 15 } },
+            { id: 8, question: "Is your system crashing or freezing frequently?", answers: { yes: 16, no: 17 } },
+            { id: 9, question: "Have you noticed multiple toolbars in your web browser?", answers: { yes: 18, no: 19 } },
+            { id: 10, question: "Do you have unauthorized programs running?", answers: { yes: 20, no: 21 } },
+            { id: 11, question: "Have you received any suspicious emails with attachments?", answers: { yes: 22, no: 23 } },
+            { id: 12, question: "This could indicate a potential infection. Have you run a full scan?", answers: { yes: 24, no: 25 } },
+            { id: 13, question: "Is your software up to date?", answers: { yes: 26, no: 27 } },
+            { id: 14, question: "Your computer might be infected with a Trojan. Have you noticed any strange activity?", answers: { yes: 28, no: 29 } },
+            { id: 15, question: "Your system appears to be functioning normally. However, consider checking for updates.", answers: null, conclusion: "No Malware Detected, but consider updates." },
+            { id: 16, question: "Your system might be infected by a Trojan. Are you noticing unauthorized access to your files?", answers: { yes: 30, no: 31 } },
+            { id: 17, question: "Your system is malware-free but may need updates.", answers: null, conclusion: "No Malware Detected, system is healthy." },
+            { id: 18, question: "You may have installed Adware. Do you want to remove it?", answers: { yes: 32, no: 33 } },
+            { id: 19, question: "Your system seems healthy. Keep your antivirus updated.", answers: null, conclusion: "No Malware Detected, keep software updated." },
+            { id: 20, question: "Your system may be infected with Spyware. Have you noticed unusual data usage?", answers: { yes: 34, no: 35 } },
+            { id: 21, question: "Your system appears malware-free. Maintain good security practices.", answers: null, conclusion: "No Malware Detected." },
+            { id: 22, question: "Have you clicked on any links in those emails?", answers: { yes: 36, no: 37 } },
+            { id: 23, question: "Your system seems fine. Stay vigilant against phishing attempts.", answers: null, conclusion: "No Malware Detected." },
+            { id: 24, question: "Please run a full scan. Check if any threats are detected.", answers: null, conclusion: "Consider running a full scan." },
+            { id: 25, question: "Please run a full scan to check for threats.", answers: null, conclusion: "Consider running a full scan." },
+            { id: 26, question: "Your software is up to date. Your system is functioning well.", answers: null, conclusion: "No Malware Detected." },
+            { id: 27, question: "Consider updating your software for better security.", answers: null, conclusion: "No Malware Detected, but updates are needed." },
+            { id: 28, question: "You may have a Trojan. Please run a malware removal tool.", answers: null, conclusion: "Possible Trojan." },
+            { id: 29, question: "Your system seems stable. Stay cautious.", answers: null, conclusion: "No Malware Detected, but stay cautious." },
+            { id: 30, question: "You may have a Keylogger. Change your passwords immediately.", answers: null, conclusion: "Possible Keylogger." },
+            { id: 31, question: "Your system seems stable. Regularly update your antivirus software.", answers: null, conclusion: "No Malware Detected." },
+            { id: 32, question: "Please consider removing the Adware using an antivirus tool.", answers: null, conclusion: "Possible Adware." },
+            { id: 33, question: "It's advisable to remove it for better performance.", answers: null, conclusion: "Adware present, consider removal." },
+            { id: 34, question: "Please run a security scan to ensure your system's safety.", answers: null, conclusion: "Possible Spyware." },
+            { id: 35, question: "Your system seems stable. Maintain good security practices.", answers: null, conclusion: "No Malware Detected." },
+            { id: 36, question: "Your system may be compromised. Change your passwords and scan for malware.", answers: null, conclusion: "Potential compromise detected." },
+            { id: 37, question: "Your system seems fine. Stay cautious with email links.", answers: null, conclusion: "No Malware Detected." }
+        ];
+
+        const chatBox = document.getElementById('chatBox');
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+
+        function showMessage(message, type) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${type}Message`;
+            messageElement.innerText = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+        }
+
+        function askQuestion() {
+            if (currentQuestion < questionPool.length) {
+                const question = questionPool[currentQuestion];
+                showMessage(question.question, 'bot');
+            } else {
+                showMessage("Thank you for using the Malware Detection Chatbot!", 'bot');
+                yesButton.style.display = 'none';
+                noButton.style.display = 'none';
+                return;
+            }
+        }
+
+        yesButton.addEventListener('click', () => {
+            const question = questionPool[currentQuestion];
+            if (question.answers) {
+                currentQuestion = question.answers.yes - 1; // Move to the next question
+            } else {
+                showMessage(question.conclusion, 'bot');
+                yesButton.style.display = 'none';
+                noButton.style.display = 'none';
+                return;
+            }
+            showMessage("Yes", 'user');
+            askQuestion();
+        });
+
+        noButton.addEventListener('click', () => {
+            const question = questionPool[currentQuestion];
+            if (question.answers) {
+                currentQuestion = question.answers.no - 1; // Move to the next question
+            } else {
+                showMessage(question.conclusion, 'bot');
+                yesButton.style.display = 'none';
+                noButton.style.display = 'none';
+                return;
+            }
+            showMessage("No", 'user');
+            askQuestion();
+        });
+
+        askQuestion(); // Start the questioning process
+    </script>
+</body>
+</html>

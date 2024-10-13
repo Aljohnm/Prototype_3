@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New User</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="/admin_dashboard" class="active">Dashboard</a>
+        <a href="/data_visualization">Data Visualization</a>
+        <a href="/data_prediction">Data Prediction</a>
+        <a href="/upload_dataset">Upload Dataset</a>
+        <a href="/logout">Logout</a>
+    </nav>
+    <!-- Container for the form -->
+    <div class="container">
+        <h2>Add a New User</h2>
+        <div class="form-container">
+            <div class="form-box">
+                <form action="/create_user" method="POST">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <label for="role">Role:</label>
+                    <select id="role" name="role" required>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+
+                    <button type="submit">Create User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

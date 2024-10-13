@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Dataset</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav>
+        <a href="/admin_dashboard" >Dashboard</a>
+        <a href="/data_visualization" >Data Visualization</a>
+        <a href="/data_prediction" >Data Prediction</a>
+        <a href="/upload_dataset" class="active">Upload Dataset</a>
+		<a href="/chatbot">Chat Bot</a>
+		<a href="q_and_a">Admin Q&A</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <!-- Upload Dataset Section -->
+    <div class="upload-container">
+        <h1>Upload Dataset</h1>
+        <form id="datasetForm" enctype="multipart/form-data">
+            <label class="custom-file-upload">
+                <input type="file" name="dataset" id="fileInput" required>
+                Browse...
+            </label>
+            <span class="file-name" id="fileName">No file selected</span><br>
+            <button type="submit">Upload Dataset</button>
+        </form>
+        <div id="uploadMessage"></div>
+
+        <script>
+            // Handle the file selection display
+            document.getElementById('fileInput').addEventListener('change', function () {
+                var fileName = this.files[0].name;
+                document.getElementById('fileName').textContent = fileName;
+            });
+
+            // Handle the form submission via AJAX
+            $(document).ready(function () {
+                $('#datasetForm').on('submit', function (event) {
+                    event.preventDefault(); // Prevent the form from submitting via the browser
+
+                    var formData = new FormData(this); // Create FormData object
+
+                    $.ajax({
+                        url: '/upload_dataset',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            // Show success popup
+                            alert('Dataset uploaded successfully!');
+                            $('#uploadMessage').html('<p style="color:green;">Dataset uploaded successfully!</p>');
+                        },
+                        error: function () {
+                            // Show error popup
+                            alert('Failed to upload dataset.');
+                            $('#uploadMessage').html('<p style="color:red;">Failed to upload dataset.</p>');
+                        }
+                    });
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

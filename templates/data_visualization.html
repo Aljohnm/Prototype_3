@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization</title>
+    <style>
+        /* Centering the content */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width:1000px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 4px;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #333;
+        }
+
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        nav a.active {
+            background-color: #4CAF50;
+        }
+
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Alerts for missing data */
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Move the navigation outside the container to keep it at the top -->
+    <nav>
+        <a href="/admin_dashboard" >Dashboard</a>
+        <a href="/data_visualization" class="active">Data Visualization</a>
+        <a href="/data_prediction">Data Prediction</a>
+        <a href="/upload_dataset">Upload Dataset</a>
+        <a href="/chatbot">Chat Bot</a>
+        <a href="q_and_a">Admin Q&A</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <div class="container">
+        <h1>Data Visualization - Trojan Malware Analysis</h1>
+
+        <!-- Missing data warning (if applicable) -->
+        {% if missing_message %}
+            <div class="alert">{{ missing_message }}</div>
+        {% endif %}
+
+        <!-- Dropdown Form for Category Filter -->
+        <form action="/data_visualization" method="GET">
+            <label for="category">Filter by Category:</label>
+            <select name="category" id="category">
+                <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All Categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Apply Filter</button>
+        </form>
+
+        <!-- Visualization 1: Pie Chart -->
+        <h3>Distribution of Trojan Categories</h3>
+        <img src="{{ category_pie_url }}" alt="Category Pie Chart"><br>
+
+        <!-- Visualization 2: Memory Usage -->
+        <h3>Memory Usage by Trojan Category</h3>
+        <img src="{{ memory_usage_url }}" alt="Memory Usage"><br>
+
+        <!-- Visualization 3: Battery Usage -->
+        <h3>Battery Usage by Trojan Category</h3>
+        <img src="{{ battery_usage_url }}" alt="Battery Usage"><br>
+
+        <!-- Visualization 4: Network Usage -->
+        <h3>Network Usage by Trojan Category</h3>
+        <img src="{{ network_usage_url }}" alt="Network Usage"><br>
+
+        <!-- Visualization 5: API Usage -->
+        <h3>API Usage by Trojan Category</h3>
+        <img src="{{ api_usage_url }}" alt="API Usage"><br>
+
+        <!-- Optional: Add a message if some data visualizations couldn't be rendered due to missing columns -->
+        {% if missing_columns %}
+            <div class="alert">
+                <p>The following required columns were missing and their related visualizations could not be generated:</p>
+                <ul>
+                    {% for col in missing_columns %}
+                        <li>{{ col }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

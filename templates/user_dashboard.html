@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/style.css">
+        <title>User Dashboard</title>
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <nav>
+            <a href="/user_dashboard" class="active">Dashboard</a>
+            <a href="/result">Check URL</a> <!-- Added "Check URL" link -->
+            <a href="/overview_malware">Malware Overview</a>
+            <a href="/risk_notification">Risk Info</a>
+            <a href="/users_qa">User Q&A</a>
+            <a href="/chatbotuser">Chat Bot</a>
+            <a href="/logout">Logout</a>
+        </nav>
+
+        <h1>Welcome, User!</h1>
+        <!-- Dashboard content sections -->
+        <div class="dashboard">
+            <!-- Recent Malware Checks -->
+            <!-- Recent Malware Checks -->
+            <section class="url-checks">
+                <h2>Recent Malware Checks</h2>
+                <ul>
+                    {% for entry in recent_urls %}
+                    <li>{{ entry.url }} - Status: {{ entry.result }}</li>
+                    {% else %}
+                    <li>No recent checks yet.</li>
+                    {% endfor %}
+                </ul>
+            </section>
+            
+
+            <!-- Recent Q&A Activity -->
+            <section class="qa-activity">
+                <h2>Recent Q&A Activity</h2>
+                <ul>
+                    <li><a href="/users_qa">How to detect malware in large
+                            files?</a> - Answered</li>
+                    <li><a href="/users_qa">Can malware hide in PDFs?</a> - Not
+                        answered yet</li>
+                    <li><a href="/users_qa">What are the signs of malware
+                            infection?</a> - Answered</li>
+                </ul>
+                <button onclick="window.location.href='/users_qa'">Ask a
+                    Question</button>
+            </section>
+
+            <!-- Malware Statistics -->
+            <section class="malware-stats">
+                <h2>Malware Detection Statistics</h2>
+                <p>Total files scanned: {{ session.get('good_url_count', 0) + session.get('bad_url_count', 0) }}</p>
+                <p>Good URLs: {{ session.get('good_url_count', 0) }}</p>
+                <p>Bad URLs: {{ session.get('bad_url_count', 0) }}</p>
+                {% if session.get('good_url_count', 0) == 0 and session.get('bad_url_count', 0) == 0 %}
+                    <p>No URLs checked yet.</p>
+                {% endif %}
+            </section>
+            
+           
+
+            <!-- Security Tips -->
+            <section class="security-tips">
+                <h2>Security Tips</h2>
+                <ul>
+                    <li>Regularly update your antivirus software.</li>
+                    <li>Always scan email attachments before opening.</li>
+                    <li>Avoid downloading files from untrusted sources.</li>
+                </ul>
+            </section>
+        </div>
+    </body>
+</html>

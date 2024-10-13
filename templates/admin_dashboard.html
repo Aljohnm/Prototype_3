@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <a href="/admin_dashboard" class="active">Dashboard</a>
+        <a href="/data_visualization">Data Visualization</a>
+        <a href="/data_prediction">Data Prediction</a>
+        <a href="/upload_dataset">Upload Dataset</a>
+		<a href="/chatbot">Chat Bot</a>
+		<a href="q_and_a">Admin Q&A</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <div class="dashboard-container">
+        <h1>Welcome to the Admin Dashboard</h1>
+
+        <section class="section">
+            <h2>Manage Users</h2>
+            <ul>
+                <li><a href="/add_user">Add New User</a></li>
+                <li><a href="/view_users">View All Users</a></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Data Visualization</h2>
+            <a href="/data_visualization">Go to Data Visualization</a>
+        </section>
+
+        <section class="section">
+            <h2>Data Prediction</h2>
+            <a href="/data_prediction">Go to Data Prediction</a>
+        </section>
+
+       
+    </div>
+</body>
+</html>

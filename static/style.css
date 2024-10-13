@@ -1,0 +1,215 @@
+/* Main body settings */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-container {
+    width: 70%;
+    margin: 40px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2em;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    border-bottom: 2px solid black;
+    padding-bottom: 8px;
+}
+
+.section {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.section ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+.section ul li {
+    margin: 8px 0;
+}
+
+.section a {
+    font-size: 1.1em;
+    padding: 8px 12px;
+    color: #4a359f;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.section a:hover {
+    color: white;
+    background-color:  #4a359f;
+    border-color:  black;
+    text-decoration: none;
+}
+
+button {
+    padding: 10px 15px;
+    background-color:  #4a359f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color:  #4a359f;
+}
+
+/* Updated Navigation bar styles */
+nav {
+    background-color: black;
+    overflow: hidden;
+    padding: 8px 0;
+}
+
+nav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav a:hover {
+    background-color:  #291675;
+    color: white;
+}
+
+nav a.active {
+    background-color:  #4a359f;
+    color: white;
+}
+
+/* Styles specific to the Upload Dataset page */
+.upload-container {
+    width: 60%;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.upload-container h1 {
+    font-size: 2em;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 350px;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    background-color: #4a359f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #3b2a8e;
+}
+
+#uploadMessage {
+    margin-top: 20px;
+    font-size: 1.1em;
+}
+
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #ea3939   ;
+    color: #ffffff;
+    margin-right: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus {
+    outline: none;
+    border-color: #4a359f; /* Color when focused */
+    box-shadow: 0 0 5px rgba(74, 53, 159, 0.5);
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #4a359f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #3b2a8e;
+}
+
+ /* Styling the file input */
+ .custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #4a359f;
+    color: white;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background-color: #3b2a8e;
+}
+
+/* Hide the actual file input */
+input[type="file"] {
+    display: none;
+}
+
+/* Styling the filename display */
+.file-name {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}

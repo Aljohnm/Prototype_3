@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Prediction</title>
+    <style>
+        /* Centering the content */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for the results table */
+        .result {
+            text-align: center;
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .result table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .result table th, .result table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .result table th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .result table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .result table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .result table tr td {
+            color: #34495e;
+        }
+
+        .result table {
+            width: 100%;
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .alert-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+
+        h1, h3 {
+            color: #333;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #333;
+        }
+
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        nav a.active {
+            background-color: #4CAF50;
+        }
+
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Move the navigation outside the container to keep it at the top -->
+    <nav>
+        <a href="/admin_dashboard" >Dashboard</a>
+        <a href="/data_visualization">Data Visualization</a>
+        <a href="/data_prediction" class="active">Data Prediction</a>
+        <a href="/upload_dataset">Upload Dataset</a>
+        <a href="/chatbot">Chat Bot</a>
+        <a href="/q_and_a">Admin Q&A</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <div class="container">
+        <h1>Data Prediction - Trojan Malware Analysis</h1>
+
+        <!-- Display Warning for Missing Columns -->
+        {% if missing_message %}
+            <div class="alert alert-warning">{{ missing_message }}</div>
+        {% endif %}
+
+        <!-- Prediction Summary -->
+        <h3>Prediction Summary</h3>
+        <p><strong>Total High Memory Instances:</strong> {{ prediction_summary.total_high_memory_instances }}</p>
+        <p><strong>Highest Risk Category:</strong> {{ prediction_summary.highest_risk_category }}</p>
+        <p><strong>Most Network Activity:</strong> {{ prediction_summary.most_network_activity }}</p>
+        <p><strong>Most Battery Usage:</strong> {{ prediction_summary.most_battery_usage }}</p>
+        <p><strong>Critical Date:</strong> {{ prediction_summary.critical_date }}</p>
+        <p><strong>Suggested Action:</strong> {{ prediction_summary.suggested_action }}</p>
+
+        <!-- High Memory Instances by Category -->
+        <h3>High Memory Instances by Category</h3>
+        <img src="{{ memory_pred_img }}" alt="High Memory Instances by Category"><br>
+
+        <!-- Predicted API Calls Over Time -->
+        <h3>Predicted API Calls Over Time</h3>
+        <img src="{{ api_pred_img }}" alt="Predicted API Calls Over Time"><br>
+
+        <!-- Detailed Results -->
+        <h3>Detailed Results</h3>
+        <div class="result">{{ detailed_results|safe }}</div>
+    </div>
+</body>
+</html>
